@@ -1,4 +1,4 @@
-# sleep-med-timer
+# Sleep Med Timer
 
 A one-button bedside device that tells you, in the dark, whether it's too
 late to take a sleep med — without making you look at a clock. Press the
@@ -7,61 +7,7 @@ button, get a green or red LED for 3 seconds.
 Built for the **M5Stack ATOM Lite** (recommended; LED only) or **ATOM
 Echo** (LED + speaker).
 
-## Quick start
-
-### 1. Plug it in
-
-Buy an ATOM Lite ([Amazon](https://www.amazon.com/s?k=m5stack+atom+lite)
-· [Google](https://www.google.com/search?q=m5stack+atom+lite))
-or ATOM Echo ([Amazon](https://www.amazon.com/s?k=m5stack+atom+echo)
-· [Google](https://www.google.com/search?q=m5stack+atom+echo))
-— ~$10–$15. Plug it into your computer with a USB-C cable, then flash:
-
-```
-pip install platformio
-git clone https://github.com/seanahrens/sleep-med-timer.git
-cd sleep-med-timer
-pio run -t upload
-```
-
-First build pulls the ESP32 toolchain (5–10 min). After flashing, the
-device runs from any USB power source — a phone charger is fine.
-
-### 2. Set the clock
-
-The ATOM has no battery, so the time has to come from somewhere.
-
-**Easiest right now** — manual. Drifts ~1 min/week, and resets every
-time the device is unplugged:
-
-Set a phone alarm for the minute before any upcoming hour (early-morning
-hours need fewest taps). When it rings, hold the button ~5 seconds (past
-both the cyan and magenta flashes), release, then tap N times where N
-is the upcoming hour on a 24-hour clock (7 for 7 am, 22 for 10 pm).
-Wait 3 seconds for the green confirm.
-
-**Best long term** — WiFi. Auto-syncs daily, survives unplugging:
-
-On first boot the LED is solid blue. On your phone install
-**ESP BLE Provisioning**
-([iOS](https://apps.apple.com/us/app/esp-ble-provisioning/id1473590141) ·
-[Android](https://play.google.com/store/apps/details?id=com.espressif.provble)),
-pick `PROV_SLEEPMED`, enter PoP `sleepmed`, choose your WiFi. Two short
-green blinks = online.
-
-### 3. Set the medication cutoff time
-
-Hold the button ~3 seconds, release after the cyan flash but before the
-magenta flash. Tap N times where N is your cutoff hour on a 24-hour
-clock (22 = 10 pm, 24 = midnight, 1 = 1 am, 4 = 4 am). Wait 3 seconds
-for two green blinks.
-
-### 4. Test
-
-Press the button. If it's within the 12 hours before your cutoff time,
-you'll see green. Otherwise red.
-
-## Reference
+## Usage
 
 ### LED answer (after a single press)
 
@@ -83,6 +29,57 @@ you'll see green. Otherwise red.
 While holding, the LED flashes **cyan** at 2 s and **magenta** at 4 s so
 you can tell which mode you'll enter when you let go.
 
+## Setup
+
+### 1. Plug it in
+
+Buy an ATOM Lite ([Amazon](https://www.amazon.com/s?k=m5stack+atom+lite)
+· [Google](https://www.google.com/search?q=m5stack+atom+lite))
+or ATOM Echo ([Amazon](https://www.amazon.com/s?k=m5stack+atom+echo)
+· [Google](https://www.google.com/search?q=m5stack+atom+echo))
+— ~$15-$20. Plug it into your computer with a USB-C data cable, then in terminal app copy and paste:
+
+```
+pip install platformio
+git clone https://github.com/seanahrens/sleep-med-timer.git
+cd sleep-med-timer
+pio run -t upload
+```
+
+First build pulls the ESP32 toolchain (5–10 min). After flashing, the
+device runs from any USB power source — a phone charger is fine.
+
+### 2. Set the clock
+
+The ATOM has no battery, so the time has to come from somewhere.
+
+**Easiest right now** — Manually Set the Hour at HH:00. Drifts ~1 min/week, and resets every
+time the device is unplugged:
+
+At the start of the next hour, hold the button ~4 seconds, release, then tap N times where N
+is the hour on a 24-hour clock. Wait 3 seconds for the green confirm.
+
+**Best long term** — Set up WiFi Connection. Auto-syncs daily, survives unplugging:
+
+1. On your phone install **ESP BLE Provisioning**
+([iOS](https://apps.apple.com/us/app/esp-ble-provisioning/id1473590141) ·
+[Android](https://play.google.com/store/apps/details?id=com.espressif.provble)),
+2. Then unplug/replug the device. 
+3. In app, "Provision New Device" (wording may vary) > "I don't have a QR Code" / "Manual/Bluetooth" > Pick PROV_SLEEPMED > Enter 'sleepmed' as PoP Code > Pick your home WiFi > Wait ~10sec for two short green blinks.
+
+### 3. Set the medication cutoff time
+
+Hold the button ~2 seconds, release after the cyan flash but before the
+magenta flash. Tap N times where N is your cutoff hour on a 24-hour
+clock (22 = 10 pm, 24 = midnight, 1 = 1 am, 4 = 4 am). Wait 3 seconds
+for two green blinks.
+
+### 4. Test
+
+Press the button. If it's within the 12 hours before your cutoff time,
+you'll see green. Otherwise red.
+
+
 ## What happens when the device is unplugged
 
 The ATOM has no battery — when unplugged, the wall clock is lost. Your
@@ -91,9 +88,9 @@ survive.
 
 When plugged back in:
 
-- *With WiFi*: NTP restores the clock automatically; you won't notice
+- *With WiFi*:  Restores the clock automatically; you won't notice
   the gap.
-- *Without WiFi*: the clock is wrong. Two red boot blinks are the cue
+- *Without WiFi*: The clock is wrong. Two red boot blinks are the cue
   — re-set the clock using step 2 above.
 
 ## Troubleshooting
